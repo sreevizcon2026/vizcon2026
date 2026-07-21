@@ -164,6 +164,25 @@ st.markdown("""
         color: #3b82f6;
         margin-bottom: 8px;
     }
+    .guess-box p, .guess-box strong {
+        color: #ffffff !important;
+    }
+
+    /* Fix button visibility */
+    .stButton > button {
+        color: #ffffff !important;
+        background-color: #1a2744 !important;
+        border: 1px solid #3b82f6 !important;
+    }
+    .stButton > button:hover {
+        background-color: #2a4a7a !important;
+        color: #ffffff !important;
+    }
+    .stButton > button[kind="primary"] {
+        background-color: #3b82f6 !important;
+        color: #ffffff !important;
+        border: none !important;
+    }
 
     .source-text {
         font-size: 0.7rem;
