@@ -268,16 +268,16 @@ if 'hour' not in st.session_state:
 if 'guess_made' not in st.session_state:
     st.session_state.guess_made = {}
 
-NAV_ITEMS = ['06:00', '09:00', '12:00', '15:00', '18:00', '22:00', 'Children', 'Hope', 'Thrive', 'What If', 'How Built']
+NAV_ITEMS = ['06:00', '09:00', '12:00', '15:00', '18:00', '22:00', 'Children', 'Hope', 'Thrive', 'What If']
 HOUR_LABELS = {
     '06:00': 'Wake Up', '09:00': 'Work', '12:00': 'Food',
     '15:00': 'Connection', '18:00': 'Family', '22:00': 'Night',
-    'Children': 'Children', 'Hope': 'Hope', 'Thrive': 'Thrive Index', 'What If': 'What If', 'How Built': 'How Built'
+    'Children': 'Children', 'Hope': 'Hope', 'Thrive': 'Thrive Index', 'What If': 'What If'
 }
 HOUR_ICONS = {
     '06:00': '☀️', '09:00': '💼', '12:00': '🍽️',
     '15:00': '🌐', '18:00': '👨‍👩‍👧', '22:00': '🌙',
-    'Children': '👶', 'Hope': '🌱', 'Thrive': '⭐', 'What If': '🔮', 'How Built': '🛠️'
+    'Children': '👶', 'Hope': '🌱', 'Thrive': '⭐', 'What If': '🔮'
 }
 
 
@@ -428,6 +428,93 @@ def render_wake_up():
     </div>
     """, unsafe_allow_html=True)
 
+    # === THE SIGNATURE VISUAL: 24-Hour Radial Clock (FIRST THING JUDGES SEE) ===
+    st.markdown("""
+    <h3 style="text-align:center; color:#ffffff; margin-bottom:8px;">🕐 The 24-Hour Clock: How Three Countries Spend Their Day</h3>
+    <p style="text-align:center; color:#8892a4; font-size:0.9rem; margin-bottom:24px;">
+        Same 24 hours. Completely different lives. Each ring represents one country's daily time allocation.
+    </p>
+    """, unsafe_allow_html=True)
+
+    # Radial clock data (minutes per activity, must sum to 1440)
+    clock_data = {
+        'Japan': {'Sleep': 442, 'Work': 375, 'Commute': 80, 'Eating': 90, 'Leisure': 251, 'Personal Care': 125, 'Other': 77},
+        'Finland': {'Sleep': 520, 'Work': 265, 'Commute': 50, 'Eating': 85, 'Leisure': 285, 'Personal Care': 140, 'Other': 95},
+        'Mexico': {'Sleep': 486, 'Work': 420, 'Commute': 95, 'Eating': 75, 'Leisure': 190, 'Personal Care': 115, 'Other': 59},
+    }
+
+    colors_clock = {
+        'Sleep': '#3b82f6',
+        'Work': '#ef4444',
+        'Commute': '#f97316',
+        'Eating': '#4ade80',
+        'Leisure': '#a855f7',
+        'Personal Care': '#06b6d4',
+        'Other': '#6b7280'
+    }
+
+    clock_cols = st.columns(3)
+
+    for idx, (country_name, activities) in enumerate(clock_data.items()):
+        with clock_cols[idx]:
+            fig = go.Figure()
+            cumulative = 0
+            for cat, mins in activities.items():
+                theta_start = cumulative / 1440 * 360
+                theta_end = (cumulative + mins) / 1440 * 360
+                n_points = max(10, int(mins / 10))
+                theta_range = np.linspace(theta_start, theta_end, n_points)
+                fig.add_trace(go.Barpolar(
+                    r=[1] * n_points,
+                    theta=theta_range,
+                    width=[((theta_end - theta_start) / n_points)] * n_points,
+                    marker_color=colors_clock[cat],
+                    marker_line_width=0,
+                    name=cat,
+                    showlegend=(idx == 0),
+                    hovertemplate=f"{cat}: {mins} min ({mins/60:.1f}h)<extra>{country_name}</extra>"
+                ))
+                cumulative += mins
+
+            fig.update_layout(
+                polar=dict(
+                    bgcolor='rgba(0,0,0,0)',
+                    radialaxis=dict(visible=False, range=[0, 1.2]),
+                    angularaxis=dict(
+                        visible=True, direction='clockwise', rotation=90,
+                        tickmode='array', tickvals=[0, 90, 180, 270],
+                        ticktext=['12AM', '6AM', '12PM', '6PM'],
+                        tickfont=dict(color='#8892a4', size=9), gridcolor='#1a2744'
+                    )
+                ),
+                paper_bgcolor='rgba(0,0,0,0)', font=dict(color='#8892a4'),
+                height=280, margin=dict(t=40, b=20, l=20, r=20),
+                title=dict(text=f"<b>{country_name}</b>", x=0.5, font=dict(color='#ffffff', size=14)),
+                legend=dict(orientation='h', y=-0.15, x=0.5, xanchor='center', font=dict(size=9, color='#8892a4'))
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            happiness_map = {'Japan': 6.1, 'Finland': 7.8, 'Mexico': 6.3}
+            work_h = activities['Work'] / 60
+            leisure_h = activities['Leisure'] / 60
+            st.markdown(f"""
+            <div style="text-align:center; font-size:0.8rem; color:#8892a4;">
+                Work: <span style="color:#ef4444;font-weight:600;">{work_h:.1f}h</span> · 
+                Leisure: <span style="color:#a855f7;font-weight:600;">{leisure_h:.1f}h</span> · 
+                Happiness: <span style="color:#ff9900;font-weight:600;">{happiness_map[country_name]}/10</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="discovery-box" style="margin-top:24px;">
+        <h3 style="color:#ff9900;margin:0;">💡 WHAT THE CLOCKS REVEAL</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Finland works 2.6 fewer hours per day than Mexico — and is the happiest country on Earth.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">The visual pattern is clear: more purple (leisure) and blue (sleep) = higher happiness. The happiest country works least and rests most.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
     # Guess-first interaction
     guess_key = 'sleep_guess'
     if guess_key not in st.session_state.guess_made:
@@ -521,114 +608,6 @@ def render_wake_up():
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: OECD Time Use Database, WHO Life Tables, World Happiness Report 2024")
-
-    # === THE SIGNATURE VISUAL: 24-Hour Radial Clock ===
-    st.markdown("---")
-    st.markdown("""
-    <h3 style="text-align:center; color:#ffffff; margin-bottom:8px;">🕐 The 24-Hour Clock: How Three Countries Spend Their Day</h3>
-    <p style="text-align:center; color:#8892a4; font-size:0.9rem; margin-bottom:24px;">
-        Same 24 hours. Completely different lives. Each ring represents one country's daily time allocation.
-    </p>
-    """, unsafe_allow_html=True)
-
-    # Radial clock data (minutes per activity, must sum to 1440)
-    clock_data = {
-        'Japan': {'Sleep': 442, 'Work': 375, 'Commute': 80, 'Eating': 90, 'Leisure': 251, 'Personal Care': 125, 'Other': 77},
-        'Finland': {'Sleep': 520, 'Work': 265, 'Commute': 50, 'Eating': 85, 'Leisure': 285, 'Personal Care': 140, 'Other': 95},
-        'Mexico': {'Sleep': 486, 'Work': 420, 'Commute': 95, 'Eating': 75, 'Leisure': 190, 'Personal Care': 115, 'Other': 59},
-    }
-
-    colors = {
-        'Sleep': '#3b82f6',
-        'Work': '#ef4444',
-        'Commute': '#f97316',
-        'Eating': '#4ade80',
-        'Leisure': '#a855f7',
-        'Personal Care': '#06b6d4',
-        'Other': '#6b7280'
-    }
-
-    clock_cols = st.columns(3)
-
-    for idx, (country, activities) in enumerate(clock_data.items()):
-        with clock_cols[idx]:
-            # Build polar bar chart (radial clock)
-            categories = list(activities.keys())
-            values = list(activities.values())
-            hours = [v / 60 for v in values]  # Convert to hours for display
-            color_list = [colors[cat] for cat in categories]
-
-            fig = go.Figure()
-
-            # Create stacked polar sectors
-            cumulative = 0
-            for i, (cat, mins) in enumerate(activities.items()):
-                # Convert minutes to degrees (1440 min = 360 degrees)
-                theta_start = cumulative / 1440 * 360
-                theta_end = (cumulative + mins) / 1440 * 360
-
-                # Create arc points
-                n_points = max(10, int(mins / 10))
-                theta_range = np.linspace(theta_start, theta_end, n_points)
-
-                fig.add_trace(go.Barpolar(
-                    r=[1] * n_points,
-                    theta=theta_range,
-                    width=[((theta_end - theta_start) / n_points)] * n_points,
-                    marker_color=colors[cat],
-                    marker_line_width=0,
-                    name=cat,
-                    showlegend=(idx == 0),
-                    hovertemplate=f"{cat}: {mins} min ({mins/60:.1f}h)<extra>{country}</extra>"
-                ))
-                cumulative += mins
-
-            fig.update_layout(
-                polar=dict(
-                    bgcolor='rgba(0,0,0,0)',
-                    radialaxis=dict(visible=False, range=[0, 1.2]),
-                    angularaxis=dict(
-                        visible=True,
-                        direction='clockwise',
-                        rotation=90,
-                        tickmode='array',
-                        tickvals=[0, 90, 180, 270],
-                        ticktext=['12AM', '6AM', '12PM', '6PM'],
-                        tickfont=dict(color='#8892a4', size=9),
-                        gridcolor='#1a2744'
-                    )
-                ),
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='#8892a4'),
-                height=280,
-                margin=dict(t=40, b=20, l=20, r=20),
-                title=dict(text=f"<b>{country}</b>", x=0.5, font=dict(color='#ffffff', size=14)),
-                legend=dict(
-                    orientation='h', y=-0.15, x=0.5, xanchor='center',
-                    font=dict(size=9, color='#8892a4')
-                )
-            )
-            st.plotly_chart(fig, use_container_width=True)
-
-            # Key stat below each clock
-            happiness = {'Japan': 6.1, 'Finland': 7.8, 'Mexico': 6.3}
-            work_h = activities['Work'] / 60
-            leisure_h = activities['Leisure'] / 60
-            st.markdown(f"""
-            <div style="text-align:center; font-size:0.8rem; color:#8892a4;">
-                Work: <span style="color:#ef4444;font-weight:600;">{work_h:.1f}h</span> · 
-                Leisure: <span style="color:#a855f7;font-weight:600;">{leisure_h:.1f}h</span> · 
-                Happiness: <span style="color:#ff9900;font-weight:600;">{happiness[country]}/10</span>
-            </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="discovery-box" style="margin-top:24px;">
-        <h3 style="color:#ff9900;margin:0;">💡 WHAT THE CLOCKS REVEAL</h3>
-        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Finland works 2.6 fewer hours per day than Mexico — and is the happiest country on Earth.</p>
-        <p style="font-size:0.9rem;color:#8892a4;">The difference isn't just in work hours. Finland invests that time in leisure (+1.6h/day) and sleep (+34 min). Japan works almost as much as Mexico but sleeps far less — and ranks lower in happiness than both Nordic countries. The visual pattern is clear: more purple (leisure) and blue (sleep) = higher happiness.</p>
-    </div>
-    """, unsafe_allow_html=True)
 
     # Transition to next chapter
     st.markdown("""
