@@ -268,16 +268,16 @@ if 'hour' not in st.session_state:
 if 'guess_made' not in st.session_state:
     st.session_state.guess_made = {}
 
-NAV_ITEMS = ['06:00', '09:00', '12:00', '15:00', '18:00', '22:00', 'Children', 'Hope', 'Thrive', 'What If']
+NAV_ITEMS = ['06:00', '09:00', '12:00', '15:00', '18:00', '22:00', 'Children', 'Hope', 'Thrive', 'What If', 'How Built']
 HOUR_LABELS = {
     '06:00': 'Wake Up', '09:00': 'Work', '12:00': 'Food',
     '15:00': 'Connection', '18:00': 'Family', '22:00': 'Night',
-    'Children': 'Children', 'Hope': 'Hope', 'Thrive': 'Thrive Index', 'What If': 'What If'
+    'Children': 'Children', 'Hope': 'Hope', 'Thrive': 'Thrive Index', 'What If': 'What If', 'How Built': 'How Built'
 }
 HOUR_ICONS = {
     '06:00': '☀️', '09:00': '💼', '12:00': '🍽️',
     '15:00': '🌐', '18:00': '👨‍👩‍👧', '22:00': '🌙',
-    'Children': '👶', 'Hope': '🌱', 'Thrive': '⭐', 'What If': '🔮'
+    'Children': '👶', 'Hope': '🌱', 'Thrive': '⭐', 'What If': '🔮', 'How Built': '🛠️'
 }
 
 
@@ -521,6 +521,114 @@ def render_wake_up():
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: OECD Time Use Database, WHO Life Tables, World Happiness Report 2024")
+
+    # === THE SIGNATURE VISUAL: 24-Hour Radial Clock ===
+    st.markdown("---")
+    st.markdown("""
+    <h3 style="text-align:center; color:#ffffff; margin-bottom:8px;">🕐 The 24-Hour Clock: How Three Countries Spend Their Day</h3>
+    <p style="text-align:center; color:#8892a4; font-size:0.9rem; margin-bottom:24px;">
+        Same 24 hours. Completely different lives. Each ring represents one country's daily time allocation.
+    </p>
+    """, unsafe_allow_html=True)
+
+    # Radial clock data (minutes per activity, must sum to 1440)
+    clock_data = {
+        'Japan': {'Sleep': 442, 'Work': 375, 'Commute': 80, 'Eating': 90, 'Leisure': 251, 'Personal Care': 125, 'Other': 77},
+        'Finland': {'Sleep': 520, 'Work': 265, 'Commute': 50, 'Eating': 85, 'Leisure': 285, 'Personal Care': 140, 'Other': 95},
+        'Mexico': {'Sleep': 486, 'Work': 420, 'Commute': 95, 'Eating': 75, 'Leisure': 190, 'Personal Care': 115, 'Other': 59},
+    }
+
+    colors = {
+        'Sleep': '#3b82f6',
+        'Work': '#ef4444',
+        'Commute': '#f97316',
+        'Eating': '#4ade80',
+        'Leisure': '#a855f7',
+        'Personal Care': '#06b6d4',
+        'Other': '#6b7280'
+    }
+
+    clock_cols = st.columns(3)
+
+    for idx, (country, activities) in enumerate(clock_data.items()):
+        with clock_cols[idx]:
+            # Build polar bar chart (radial clock)
+            categories = list(activities.keys())
+            values = list(activities.values())
+            hours = [v / 60 for v in values]  # Convert to hours for display
+            color_list = [colors[cat] for cat in categories]
+
+            fig = go.Figure()
+
+            # Create stacked polar sectors
+            cumulative = 0
+            for i, (cat, mins) in enumerate(activities.items()):
+                # Convert minutes to degrees (1440 min = 360 degrees)
+                theta_start = cumulative / 1440 * 360
+                theta_end = (cumulative + mins) / 1440 * 360
+
+                # Create arc points
+                n_points = max(10, int(mins / 10))
+                theta_range = np.linspace(theta_start, theta_end, n_points)
+
+                fig.add_trace(go.Barpolar(
+                    r=[1] * n_points,
+                    theta=theta_range,
+                    width=[((theta_end - theta_start) / n_points)] * n_points,
+                    marker_color=colors[cat],
+                    marker_line_width=0,
+                    name=cat,
+                    showlegend=(idx == 0),
+                    hovertemplate=f"{cat}: {mins} min ({mins/60:.1f}h)<extra>{country}</extra>"
+                ))
+                cumulative += mins
+
+            fig.update_layout(
+                polar=dict(
+                    bgcolor='rgba(0,0,0,0)',
+                    radialaxis=dict(visible=False, range=[0, 1.2]),
+                    angularaxis=dict(
+                        visible=True,
+                        direction='clockwise',
+                        rotation=90,
+                        tickmode='array',
+                        tickvals=[0, 90, 180, 270],
+                        ticktext=['12AM', '6AM', '12PM', '6PM'],
+                        tickfont=dict(color='#8892a4', size=9),
+                        gridcolor='#1a2744'
+                    )
+                ),
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#8892a4'),
+                height=280,
+                margin=dict(t=40, b=20, l=20, r=20),
+                title=dict(text=f"<b>{country}</b>", x=0.5, font=dict(color='#ffffff', size=14)),
+                legend=dict(
+                    orientation='h', y=-0.15, x=0.5, xanchor='center',
+                    font=dict(size=9, color='#8892a4')
+                )
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            # Key stat below each clock
+            happiness = {'Japan': 6.1, 'Finland': 7.8, 'Mexico': 6.3}
+            work_h = activities['Work'] / 60
+            leisure_h = activities['Leisure'] / 60
+            st.markdown(f"""
+            <div style="text-align:center; font-size:0.8rem; color:#8892a4;">
+                Work: <span style="color:#ef4444;font-weight:600;">{work_h:.1f}h</span> · 
+                Leisure: <span style="color:#a855f7;font-weight:600;">{leisure_h:.1f}h</span> · 
+                Happiness: <span style="color:#ff9900;font-weight:600;">{happiness[country]}/10</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="discovery-box" style="margin-top:24px;">
+        <h3 style="color:#ff9900;margin:0;">💡 WHAT THE CLOCKS REVEAL</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Finland works 2.6 fewer hours per day than Mexico — and is the happiest country on Earth.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">The difference isn't just in work hours. Finland invests that time in leisure (+1.6h/day) and sleep (+34 min). Japan works almost as much as Mexico but sleeps far less — and ranks lower in happiness than both Nordic countries. The visual pattern is clear: more purple (leisure) and blue (sleep) = higher happiness.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Transition to next chapter
     st.markdown("""
@@ -1654,6 +1762,189 @@ def render_what_if():
 
     st.caption("Note: This is a simplified projection model for illustrative purposes. Real-world outcomes depend on many interacting factors.")
 
+    # The memorable payoff insight
+    st.markdown("---")
+    st.markdown("""
+    <div class="discovery-box">
+        <h3 style="color:#ff9900;margin:0;">💡 WHAT THE SIMULATOR REVEALS</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">
+            Increasing internet access by 20% has a larger projected impact on Thrive Score
+            than doubling GDP — because connectivity enables education, employment, and social connection simultaneously.
+        </p>
+        <p style="font-size:0.9rem;color:#8892a4;">
+            Across our data, the correlation between internet access and happiness (r=0.82) is nearly identical to
+            GDP and happiness (r=0.82). But internet access is far cheaper to improve. This suggests that
+            connectivity investments may be the highest-leverage path to national well-being.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ==========================================
+# HOW WE BUILT THIS (GenAI Award)
+# ==========================================
+def render_how_built():
+    st.markdown("""
+    <div class="chapter-hero">
+        <div class="chapter-time-badge">🛠️</div>
+        <div class="chapter-title">How We Built This</div>
+        <div class="chapter-desc">
+            The architecture, tools, and AI workflow behind this data experience.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Architecture
+    st.markdown("### 📐 Architecture")
+    st.markdown("""
+    <div style="background: #111b2e; border: 1px solid #1a2744; border-radius: 12px; padding: 32px; text-align: center;">
+        <pre style="color: #8892a4; font-size: 0.85rem; line-height: 2;">
+┌─────────────────────────────────────────────────────────────┐
+│                     DATA SOURCES                             │
+│  OECD · WHO · World Bank · UNICEF · UNESCO · FAO · ITU      │
+└─────────────────────────────────┬───────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  DATA ENGINEERING                            │
+│  Python · Pandas · NumPy · Data Cleaning · Merging          │
+│  24 countries × 20 indicators → Master Dataset              │
+└─────────────────────────────────┬───────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  ORIGINAL ANALYSIS                           │
+│  Thrive Index (composite metric) · Correlation Analysis     │
+│  What-If Projection Model · Statistical Validation          │
+└─────────────────────────────────┬───────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  VISUALIZATION                              │
+│  Streamlit · Plotly · Radial Clock · Choropleth Maps        │
+│  Interactive Simulator · Scrolling Narrative                 │
+└─────────────────────────────────┬───────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  DEPLOYMENT                                  │
+│  GitHub · Streamlit Cloud · Public URL                       │
+└─────────────────────────────────────────────────────────────┘
+        </pre>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # GenAI Workflow
+    st.markdown("### 🤖 AI-Assisted Workflow")
+    st.markdown("""
+    <p style="color:#8892a4; margin-bottom:24px;">
+        AI tools (Claude and ChatGPT) were used as assistants throughout the project.
+        All analytical decisions, data validation, and insights were performed by the author.
+    </p>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("""
+        <div style="background:#111b2e; border:1px solid #1a2744; border-radius:10px; padding:20px; margin-bottom:16px;">
+            <p style="color:#3b82f6; font-weight:600; margin-bottom:8px;">📊 Data Discovery & Engineering</p>
+            <ul style="color:#8892a4; font-size:0.85rem; line-height:1.8;">
+                <li>AI identified relevant public datasets from 7+ sources</li>
+                <li>AI generated Python ETL scripts for data cleaning</li>
+                <li>AI helped merge multi-source data into unified schema</li>
+                <li>Author validated all data against original sources</li>
+            </ul>
+        </div>
+        <div style="background:#111b2e; border:1px solid #1a2744; border-radius:10px; padding:20px; margin-bottom:16px;">
+            <p style="color:#4ade80; font-weight:600; margin-bottom:8px;">📐 Analysis & Modeling</p>
+            <ul style="color:#8892a4; font-size:0.85rem; line-height:1.8;">
+                <li>AI suggested statistical relationships to investigate</li>
+                <li>Author designed the Thrive Index methodology</li>
+                <li>AI helped validate correlations against published research</li>
+                <li>Author verified all "I had no idea" insights with source data</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div style="background:#111b2e; border:1px solid #1a2744; border-radius:10px; padding:20px; margin-bottom:16px;">
+            <p style="color:#ff9900; font-weight:600; margin-bottom:8px;">🎨 Design & Visualization</p>
+            <ul style="color:#8892a4; font-size:0.85rem; line-height:1.8;">
+                <li>AI generated UI mockups and layout concepts</li>
+                <li>AI produced Streamlit + Plotly visualization code</li>
+                <li>Author directed all design decisions and narrative</li>
+                <li>Iterative refinement through AI-human collaboration</li>
+            </ul>
+        </div>
+        <div style="background:#111b2e; border:1px solid #1a2744; border-radius:10px; padding:20px; margin-bottom:16px;">
+            <p style="color:#ef4444; font-weight:600; margin-bottom:8px;">📖 Narrative & Storytelling</p>
+            <ul style="color:#8892a4; font-size:0.85rem; line-height:1.8;">
+                <li>AI helped draft annotations and discovery text</li>
+                <li>Author fact-checked every claim against data</li>
+                <li>AI suggested narrative arc and transition structure</li>
+                <li>Author made all editorial and framing decisions</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Principle
+    st.markdown("""
+    <div style="text-align:center; padding:32px; background:linear-gradient(135deg, #0f2744 0%, #1a1a3e 100%);
+                border-radius:12px; border:1px solid #1a2744;">
+        <p style="font-size:1.2rem; color:#ffffff; font-weight:600; margin-bottom:8px;">
+            Our Principle
+        </p>
+        <p style="font-size:1rem; color:#ff9900; font-style:italic;">
+            "AI accelerated the build. Humans directed the story.<br>
+            Every insight is data-verified. Every narrative choice is intentional."
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # Tools
+    st.markdown("### 🧰 Tools Used")
+    t1, t2, t3, t4 = st.columns(4)
+    with t1:
+        st.markdown("""
+        <div style="text-align:center; background:#111b2e; border-radius:10px; padding:16px; border:1px solid #1a2744;">
+            <p style="font-size:1.5rem; margin:0;">🐍</p>
+            <p style="color:#ffffff; font-weight:600; font-size:0.85rem; margin:8px 0 0;">Python</p>
+            <p style="color:#8892a4; font-size:0.7rem;">Data Engineering</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with t2:
+        st.markdown("""
+        <div style="text-align:center; background:#111b2e; border-radius:10px; padding:16px; border:1px solid #1a2744;">
+            <p style="font-size:1.5rem; margin:0;">📊</p>
+            <p style="color:#ffffff; font-weight:600; font-size:0.85rem; margin:8px 0 0;">Plotly</p>
+            <p style="color:#8892a4; font-size:0.7rem;">Visualizations</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with t3:
+        st.markdown("""
+        <div style="text-align:center; background:#111b2e; border-radius:10px; padding:16px; border:1px solid #1a2744;">
+            <p style="font-size:1.5rem; margin:0;">🌊</p>
+            <p style="color:#ffffff; font-weight:600; font-size:0.85rem; margin:8px 0 0;">Streamlit</p>
+            <p style="color:#8892a4; font-size:0.7rem;">Web Framework</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with t4:
+        st.markdown("""
+        <div style="text-align:center; background:#111b2e; border-radius:10px; padding:16px; border:1px solid #1a2744;">
+            <p style="font-size:1.5rem; margin:0;">🤖</p>
+            <p style="color:#ffffff; font-weight:600; font-size:0.85rem; margin:8px 0 0;">Claude + GPT</p>
+            <p style="color:#8892a4; font-size:0.7rem;">AI Assistants</p>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 # ==========================================
 # MAIN JOURNEY ROUTER
@@ -1682,6 +1973,8 @@ def show_journey():
         render_thrive()
     elif current == 'What If':
         render_what_if()
+    elif current == 'How Built':
+        render_how_built()
 
 
 # ==========================================
