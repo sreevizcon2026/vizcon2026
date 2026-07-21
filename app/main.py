@@ -340,9 +340,12 @@ def show_landing():
             <p style="font-size: 1.3rem; color: #ffffff; margin-bottom: 16px; font-weight: 500;">
                 Every person receives the same 24 hours. Culture determines how those hours become a life.
             </p>
+            <p style="font-size: 1rem; color: #ff9900; max-width: 560px; margin: 0 auto 16px; font-style: italic;">
+                What if the happiest countries on Earth work less, rest more, and still produce 5x more value per hour?
+            </p>
             <p style="font-size: 1rem; color: #6b7a94; max-width: 560px; margin: 0 auto 40px;">
-                Follow a 24-hour journey across the globe and discover how billions of lives unfold
-                in ways you never imagined. Every hour reveals something that will change how you see the world.
+                Follow a 24-hour journey across the globe and discover how the way we spend our time
+                reveals the hidden recipe for a thriving life.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -394,7 +397,7 @@ def show_navigation():
     <div class="main-header">
         <span style="font-size: 1.5rem;">🌍</span>
         <p class="main-title">One Day on Earth</p>
-        <p class="main-subtitle">Every person receives the same 24 hours. Culture determines how those hours become a life.</p>
+        <p class="main-subtitle">What if the happiest countries work less and thrive more?</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -605,12 +608,13 @@ def render_work():
     # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
-        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Germany works 840 fewer hours than Mexico per year — yet produces 4x more value per hour.</p>
-        <p style="font-size:0.9rem;color:#8892a4;">Norway works even less and produces $95/hour. The data shows a clear negative correlation: working smarter, not longer, is the path to prosperity. Countries with strong labor protections, automation, and education invest in quality over quantity.</p>
+        <h3 style="color:#ff9900;margin:0;">💡 THE BIGGEST DISCOVERY IN THIS STORY</h3>
+        <p style="font-size:1.5rem;color:#ffffff;margin:16px 0;font-weight:700;">The 5 happiest countries work 717 fewer hours per year, enjoy 96 more minutes of daily leisure, yet produce 5× more value per hour.</p>
+        <p style="font-size:1.1rem;color:#4ade80;margin:12px 0;font-weight:500;">Working harder is not the answer. Working less might be.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Finland, Denmark, Netherlands, Sweden, and Norway all work under 1,450 hours/year — compared to 2,150+ for the least happy countries. Yet their GDP per hour worked averages $82 vs $16. The correlation between work hours and happiness is r = -0.80. The correlation between leisure time and happiness is r = +0.87. The data is unambiguous: how we spend our non-working hours matters more than how many hours we work.</p>
     </div>
     """, unsafe_allow_html=True)
-    st.caption("Sources: OECD Compendium of Productivity Indicators, ILO ILOSTAT, World Bank")
+    st.caption("Sources: OECD Compendium of Productivity Indicators, ILO ILOSTAT, World Bank, World Happiness Report")
 
     # Transition
     st.markdown("""
@@ -1290,20 +1294,27 @@ def render_hope():
         <p style="font-size: 2rem; color: #ffffff; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">
             One Earth. Billions of Lives. Twenty-Four Hours.
         </p>
-        <p style="font-size: 1.2rem; color: #8892a4; margin-bottom: 8px;">
+        <p style="font-size: 1.2rem; color: #8892a4; margin-bottom: 24px;">
             Although cultures differ, every person shares the same day.
         </p>
-        <p style="font-size: 1.2rem; color: #4ade80; font-weight: 600; margin-bottom: 32px;">
-            How we spend it reveals what we value.
+        <p style="font-size: 1.4rem; color: #ff9900; font-weight: 700; margin-bottom: 16px;">
+            The happiest countries figured out something the rest of the world hasn't:
+        </p>
+        <p style="font-size: 1.6rem; color: #4ade80; font-weight: 700; margin-bottom: 32px;">
+            Time is better spent living than working.
         </p>
         <p style="font-size: 0.95rem; color: #8892a4; max-width: 600px; margin: 0 auto 24px;">
-            Child mortality has dropped 71% since 1990. Extreme poverty fell from 36% to 8.5%.
-            Internet access went from nearly zero to 5.4 billion people connected.
-            Every one of these numbers represents millions of lives transformed.
+            They work 717 fewer hours per year. They enjoy 96 more minutes of leisure every day.
+            Yet they produce 5× more value per hour — and report the highest happiness on Earth.
         </p>
-        <p style="font-size: 0.85rem; color: #6b7a94; max-width: 500px; margin: 0 auto 24px;">
-            The progress isn't automatic — it's the result of vaccines, education, infrastructure,
-            and the work of millions of people who decided things could be better.
+        <p style="font-size: 0.95rem; color: #8892a4; max-width: 600px; margin: 0 auto 24px;">
+            Meanwhile, the world is getting better. Child mortality dropped 71% since 1990. 
+            Extreme poverty fell from 36% to 8.5%.
+            5.4 billion people are now connected to the internet.
+        </p>
+        <p style="font-size: 1.1rem; color: #ffffff; font-weight: 500; max-width: 500px; margin: 32px auto 16px;">
+            The question isn't whether we have enough hours.<br>
+            It's whether we're spending them on what matters.
         </p>
         <p style="font-size: 1.3rem; color: #ffffff; font-weight: 500; margin-top: 32px; margin-bottom: 16px;">
             Thank you for taking this journey.
