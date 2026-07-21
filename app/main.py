@@ -691,7 +691,8 @@ def render_work():
                      labels={'Work_Hours_Per_Year': 'Annual Working Hours',
                              'GDP_Per_Hour_Worked': 'GDP per Hour Worked ($)',
                              'Population_M': 'Population (M)'})
-    fig.update_traces(textposition='top center', textfont_size=9)
+    fig.update_traces(textposition='top center', textfont_size=8, cliponaxis=False)
+    fig.update_layout(uniformtext_minsize=7, uniformtext_mode='hide')
     # Trend line
     z = np.polyfit(df_countries['Work_Hours_Per_Year'], df_countries['GDP_Per_Hour_Worked'], 1)
     x_line = np.linspace(df_countries['Work_Hours_Per_Year'].min(), df_countries['Work_Hours_Per_Year'].max(), 100)
@@ -780,10 +781,13 @@ def render_food():
     fig = px.scatter(df_countries, x='Calories_Per_Day', y='Life_Expectancy',
                      text='Country', color='Region', size='Meat_Kg_Per_Year',
                      color_discrete_sequence=COLORS,
-                     labels={'Calories_Per_Day': 'Daily Calorie Supply',
+                     labels={'Calories_Per_Day': 'Daily Calorie Supply (kcal)',
                              'Life_Expectancy': 'Life Expectancy (years)',
                              'Meat_Kg_Per_Year': 'Meat (kg/yr)'})
-    fig.update_traces(textposition='top center', textfont_size=9)
+    fig.update_traces(textposition='top center', textfont_size=8, cliponaxis=False)
+    fig.update_layout(uniformtext_minsize=7, uniformtext_mode='hide')
+    fig.update_xaxes(range=[2000, 4000])
+    fig.update_yaxes(range=[50, 90])
     dark_layout(fig, 480)
     st.plotly_chart(fig, use_container_width=True)
     st.caption("Source: FAO Food Balance Sheets, WHO Global Health Observatory")
