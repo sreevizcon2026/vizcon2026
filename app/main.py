@@ -547,22 +547,33 @@ def render_wake_up():
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.metric("😴 Least Sleep", f"{int(least_sleep['Sleep_Min_Per_Day'])} min", least_sleep['Country'])
+        st.metric("😴 Least Sleep", f"{int(least_sleep['Sleep_Min_Per_Day'])//60}h {int(least_sleep['Sleep_Min_Per_Day'])%60}m", least_sleep['Country'])
     with c2:
-        st.metric("🛏️ Most Sleep", f"{int(most_sleep['Sleep_Min_Per_Day'])} min", most_sleep['Country'])
+        st.metric("🛏️ Most Sleep", f"{int(most_sleep['Sleep_Min_Per_Day'])//60}h {int(most_sleep['Sleep_Min_Per_Day'])%60}m", most_sleep['Country'])
     with c3:
-        st.metric("🌍 World Avg", f"{int(avg_sleep)} min", f"≈ {int(avg_sleep)//60}h {int(avg_sleep)%60}m")
+        st.metric("🌍 World Avg", f"{int(avg_sleep)//60}h {int(avg_sleep)%60}m", "across 24 countries")
     with c4:
-        st.metric("⏱️ Gap", f"{int(most_sleep['Sleep_Min_Per_Day'] - least_sleep['Sleep_Min_Per_Day'])} min", "Max difference")
+        gap = int(most_sleep['Sleep_Min_Per_Day'] - least_sleep['Sleep_Min_Per_Day'])
+        st.metric("⏱️ Gap", f"{gap//60}h {gap%60}m", "Max difference")
 
     st.markdown("---")
 
-    # HERO visualization: Sleep Duration by Country
+    # HERO visualization: Sleep Duration by Country (sorted by duration, shown in hours)
     st.markdown("### 😴 Sleep Duration by Country")
-    sleep_data = df_countries[['Country', 'Sleep_Min_Per_Day', 'Region']].sort_values('Sleep_Min_Per_Day', ascending=True)
-    fig = px.bar(sleep_data, x='Sleep_Min_Per_Day', y='Country', orientation='h',
-                 color='Region', color_discrete_sequence=COLORS)
-    fig.update_layout(xaxis_title="Minutes per day", yaxis_title="")
+    sort_option = st.radio("Sort by:", ["Duration", "Region"], horizontal=True, key="sleep_sort")
+    sleep_data = df_countries[['Country', 'Sleep_Min_Per_Day', 'Region']].copy()
+    sleep_data['Sleep_Hours'] = sleep_data['Sleep_Min_Per_Day'] / 60
+    sleep_data['Sleep_Label'] = sleep_data['Sleep_Min_Per_Day'].apply(lambda m: f"{int(m)//60}h {int(m)%60}m")
+    if sort_option == "Duration":
+        sleep_data = sleep_data.sort_values('Sleep_Min_Per_Day', ascending=True)
+    else:
+        sleep_data = sleep_data.sort_values(['Region', 'Sleep_Min_Per_Day'], ascending=[True, True])
+
+    fig = px.bar(sleep_data, x='Sleep_Hours', y='Country', orientation='h',
+                 color='Region', color_discrete_sequence=COLORS,
+                 hover_data={'Sleep_Label': True, 'Sleep_Hours': False, 'Sleep_Min_Per_Day': False})
+    fig.update_layout(xaxis_title="Hours per day", yaxis_title="")
+    fig.update_xaxes(range=[6, 10])
     dark_layout(fig, 450)
     st.plotly_chart(fig, use_container_width=True)
     st.caption("Source: OECD Time Use Survey, National Statistics Offices")
@@ -785,7 +796,19 @@ def render_food():
         <p style="font-size:0.9rem;color:#8892a4;">The USA consumes 3,782 calories and 124 kg of meat per person per year, yet has a life expectancy of just 77.5. Japan consumes only 2,726 calories and 52 kg of meat — and lives to 84.8. More food ≠ better health. Japan's diet emphasizes fish, vegetables, and portion control. The "quality over quantity" principle applies to plates too.</p>
     </div>
     """, unsafe_allow_html=True)
-    st.caption("Sources: FAO Food Balance Sheets 2023, WHO, Our World in Data")
+
+    # Meat consumption ranked globally
+    st.markdown("---")
+    st.markdown("### 🥩 Meat Consumption: Global Ranking (kg per person per year)")
+    meat_data = df_countries[['Country', 'Meat_Kg_Per_Year', 'Region']].sort_values('Meat_Kg_Per_Year', ascending=True)
+    fig = px.bar(meat_data, x='Meat_Kg_Per_Year', y='Country', orientation='h',
+                 color='Meat_Kg_Per_Year',
+                 color_continuous_scale=['#4ade80', '#ff9900', '#ef4444'],
+                 range_color=[0, 130])
+    fig.update_layout(xaxis_title="kg per person per year", yaxis_title="", coloraxis_showscale=False)
+    dark_layout(fig, 500)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Sources: FAO Food Balance Sheets 2023, Our World in Data")
 
     # Transition
     st.markdown("""
