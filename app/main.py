@@ -274,23 +274,26 @@ def show_landing():
     with col2:
         # Animated-looking globe
         fig = go.Figure(data=go.Choropleth(
-            locations=['USA', 'BRA', 'DEU', 'IND', 'CHN', 'JPN', 'AUS', 'NGA', 'KEN', 'ZAF', 'FRA', 'NOR'],
-            z=[78, 75, 81, 70, 78, 85, 83, 54, 61, 65, 82, 83],
-            colorscale=[[0, '#1a2744'], [0.5, '#3b82f6'], [1, '#4ade80']],
+            locations=['USA', 'BRA', 'DEU', 'IND', 'CHN', 'JPN', 'AUS', 'NGA', 'KEN', 'ZAF', 'FRA', 'NOR',
+                       'GBR', 'CAN', 'MEX', 'ARG', 'RUS', 'IDN', 'EGY', 'TUR', 'SAU', 'THA'],
+            z=[78, 75, 81, 70, 78, 85, 83, 54, 61, 65, 82, 83, 81, 82, 75, 76, 73, 71, 72, 76, 75, 77],
+            colorscale=[[0, '#2d6a4f'], [0.5, '#40916c'], [1, '#52b788']],
             showscale=False,
-            marker_line_color='#2a3a5c',
-            marker_line_width=0.5
+            marker_line_color='#4a9eff',
+            marker_line_width=0.8
         ))
         fig.update_layout(
             geo=dict(
                 projection_type='orthographic',
-                showocean=True, oceancolor='#0b1120',
+                showocean=True, oceancolor='#0a1628',
                 showlakes=False,
                 showframe=False,
                 bgcolor='rgba(0,0,0,0)',
-                landcolor='#111b2e',
-                coastlinecolor='#2a3a5c',
-                countrycolor='#1a2744',
+                landcolor='#1e3a5f',
+                coastlinecolor='#4a9eff',
+                countrycolor='#2a5a8a',
+                showcoastlines=True,
+                showcountries=True,
                 projection_rotation=dict(lon=10, lat=20)
             ),
             paper_bgcolor='rgba(0,0,0,0)',
