@@ -2,7 +2,7 @@
 24 Hours on Planet Earth
 VizCon 2026 - Streamlit App
 
-Every hour reveals a different story about humanity.
+Every person receives the same 24 hours. Culture determines how those hours become a life.
 """
 
 import streamlit as st
@@ -144,13 +144,27 @@ st.markdown("""
     .discovery-box {
         background: linear-gradient(135deg, #0f2744 0%, #1a1a3e 100%);
         border-left: 4px solid #ff9900;
-        padding: 20px;
+        padding: 24px;
         border-radius: 8px;
-        margin: 20px 0;
+        margin: 24px 0;
         font-size: 1rem;
+    }
+    .discovery-box h3 {
+        color: #ff9900;
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
     }
     .discovery-box strong {
         color: #ff9900;
+    }
+
+    .chapter-transition {
+        text-align: center;
+        color: #8892a4;
+        font-style: italic;
+        font-size: 1.1rem;
+        margin: 32px 0;
+        padding: 16px;
     }
 
     .guess-box {
@@ -323,30 +337,53 @@ def show_landing():
         st.markdown("""
         <div style="text-align: center;">
             <h1 style="font-size: 2.8rem; font-weight: 800; margin: 16px 0;">24 Hours on Planet Earth</h1>
-            <p style="font-size: 1.2rem; color: #8892a4; margin-bottom: 48px;">
-                How 24 Hours Differ Across the World
+            <p style="font-size: 1.3rem; color: #ffffff; margin-bottom: 16px; font-weight: 500;">
+                Every person receives the same 24 hours. Culture determines how those hours become a life.
             </p>
-            <p style="font-size: 1rem; color: #6b7a94; max-width: 500px; margin: 0 auto 48px;">
-                Follow a 24-hour journey across the world and discover how life changes
-                from one place to another. Every hour reveals something you didn't know.
+            <p style="font-size: 1rem; color: #6b7a94; max-width: 560px; margin: 0 auto 40px;">
+                Follow a 24-hour journey across the globe and discover how billions of lives unfold
+                in ways you never imagined. Every hour reveals something that will change how you see the world.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.markdown('<div class="stat-card"><div class="stat-value">195</div><div class="stat-label">Countries</div></div>', unsafe_allow_html=True)
-        with c2:
-            st.markdown('<div class="stat-card"><div class="stat-value">24</div><div class="stat-label">Hours</div></div>', unsafe_allow_html=True)
-        with c3:
-            st.markdown('<div class="stat-card"><div class="stat-value">8B</div><div class="stat-label">People</div></div>', unsafe_allow_html=True)
+        # Global summary card
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #0f2744 0%, #1a1a3e 100%); border-radius: 12px;
+                    padding: 24px; border: 1px solid #1a2744; margin-bottom: 40px;">
+            <p style="text-align:center; color:#8892a4; font-size:0.85rem; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">
+                What This Journey Covers
+            </p>
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px;">
+                <div style="text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#3b82f6;">24</div>
+                    <div style="font-size:0.75rem; color:#8892a4;">Countries Analyzed</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#4ade80;">6.2B</div>
+                    <div style="font-size:0.75rem; color:#8892a4;">Population Represented</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#ff9900;">8.1 hrs</div>
+                    <div style="font-size:0.75rem; color:#8892a4;">Avg Sleep</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#ef4444;">7.2 hrs</div>
+                    <div style="font-size:0.75rem; color:#8892a4;">Avg Work</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#8b5cf6;">6.3/10</div>
+                    <div style="font-size:0.75rem; color:#8892a4;">Avg Happiness</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        st.markdown("<br><br>", unsafe_allow_html=True)
-        if st.button("▶  Begin Journey", use_container_width=True, type="primary"):
+        if st.button("🌍  Begin the Journey — Follow One Day Around the World", use_container_width=True, type="primary"):
             st.session_state.page = 'journey'
             st.rerun()
 
-        st.markdown('<p style="text-align:center;color:#555;font-size:0.8rem;margin-top:48px;">"We all have the same 24 hours. But how we live them is different."</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center;color:#555;font-size:0.8rem;margin-top:48px;">VizCon 2026 · Data from OECD, WHO, World Bank, UNICEF, FAO, UNESCO, ITU</p>', unsafe_allow_html=True)
 
 
 # ==========================================
@@ -357,7 +394,7 @@ def show_navigation():
     <div class="main-header">
         <span style="font-size: 1.5rem;">🌍</span>
         <p class="main-title">One Day on Earth</p>
-        <p class="main-subtitle">How 24 Hours Differ Across the World</p>
+        <p class="main-subtitle">Every person receives the same 24 hours. Culture determines how those hours become a life.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -380,7 +417,7 @@ def render_wake_up():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">06:00</div>
-        <div class="chapter-title">Wake Up</div>
+        <div class="chapter-title">How does the world begin its day?</div>
         <div class="chapter-desc">
             The sun rises somewhere in the world. People wake up, get ready, and start their day.
             But how much sleep did they get? The answer varies by nearly 2 hours across countries.
@@ -430,46 +467,15 @@ def render_wake_up():
 
     st.markdown("---")
 
-    # Charts
-    chart1, chart2 = st.columns(2)
-
-    with chart1:
-        st.markdown("### 😴 Sleep Duration by Country")
-        sleep_data = df_countries[['Country', 'Sleep_Min_Per_Day', 'Region']].sort_values('Sleep_Min_Per_Day', ascending=True)
-        fig = px.bar(sleep_data, x='Sleep_Min_Per_Day', y='Country', orientation='h',
-                     color='Region', color_discrete_sequence=COLORS)
-        fig.update_layout(xaxis_title="Minutes per day", yaxis_title="")
-        dark_layout(fig, 450)
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: OECD Time Use Survey, National Statistics Offices")
-
-    with chart2:
-        st.markdown("### ⏰ Time Use Comparison (Min/Day)")
-        # Build time use from countries data
-        country_sel = st.selectbox("Select country", df_countries['Country'].tolist(), key="tu_country")
-        row = df_countries[df_countries['Country'] == country_sel].iloc[0]
-        work_min = row['Work_Hours_Per_Year'] / 365 * (5/7)  # approximate daily work
-        sleep_min = row['Sleep_Min_Per_Day']
-        leisure_min = row['Leisure_Min_Per_Day']
-        personal = row['Personal_Care_Min']
-        other = 1440 - sleep_min - work_min - leisure_min - personal
-
-        labels = ['Sleep', 'Work', 'Leisure', 'Personal Care', 'Other']
-        values = [sleep_min, work_min, leisure_min, personal, max(0, other)]
-        fig = go.Figure(data=[go.Pie(
-            labels=labels, values=values, hole=0.5,
-            marker=dict(colors=[BLUE, RED, GREEN, ORANGE, PURPLE]),
-            textinfo='label+percent'
-        )])
-        fig.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#8892a4'),
-            height=380, margin=dict(t=20, b=20),
-            showlegend=False,
-            annotations=[dict(text=f'1440<br>min', x=0.5, y=0.5, font_size=14, showarrow=False, font_color='white')]
-        )
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: OECD, ILO")
+    # HERO visualization: Sleep Duration by Country
+    st.markdown("### 😴 Sleep Duration by Country")
+    sleep_data = df_countries[['Country', 'Sleep_Min_Per_Day', 'Region']].sort_values('Sleep_Min_Per_Day', ascending=True)
+    fig = px.bar(sleep_data, x='Sleep_Min_Per_Day', y='Country', orientation='h',
+                 color='Region', color_discrete_sequence=COLORS)
+    fig.update_layout(xaxis_title="Minutes per day", yaxis_title="")
+    dark_layout(fig, 450)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: OECD Time Use Survey, National Statistics Offices")
 
     # Radar comparison
     st.markdown("### 🎯 Country Comparison Radar")
@@ -503,16 +509,20 @@ def render_wake_up():
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    # Discovery
+    # Discovery box - bigger, more impactful
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Japan sleeps the least among all countries (~7h 22m) yet has
-        one of the world's longest life expectancies (84.8 years). Meanwhile, South Africa sleeps the most
-        (~9h 13m) but has a life expectancy of just 64.9. Sleep duration alone doesn't predict longevity —
-        healthcare access, diet quality, and social systems matter far more.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Japan sleeps the least on Earth — yet lives the longest.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">At just 7h 22m of sleep, Japan has the shortest nights of any nation. Yet its life expectancy (84.8 years) is among the world's highest. Meanwhile, South Africa sleeps over 9 hours but lives only to 64.9. Sleep duration alone doesn't predict longevity — healthcare, diet, and social systems matter far more.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: OECD Time Use Database, WHO Life Tables, World Happiness Report 2024")
+
+    # Transition to next chapter
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">As the world finishes breakfast, another question emerges: does working longer actually make us richer?</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -522,7 +532,7 @@ def render_work():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">09:00</div>
-        <div class="chapter-title">Work & Productivity</div>
+        <div class="chapter-title">Does working longer make countries richer?</div>
         <div class="chapter-desc">
             The world clocks in. But does working longer hours actually create more wealth?
             The answer challenges everything we assume about hard work.
@@ -572,7 +582,7 @@ def render_work():
 
     st.markdown("---")
 
-    # Main scatter plot
+    # HERO: Main scatter plot - the most impactful visualization
     st.markdown("### Working Hours vs Productivity (GDP per Hour Worked)")
     fig = px.scatter(df_countries, x='Work_Hours_Per_Year', y='GDP_Per_Hour_Worked',
                      text='Country', color='Region', size='Population_M',
@@ -592,26 +602,20 @@ def render_work():
     st.plotly_chart(fig, use_container_width=True)
     st.caption("Source: OECD Employment Outlook, ILO, World Bank")
 
-    # Bar chart comparison
-    st.markdown("### 📊 Annual Working Hours Ranked")
-    work_sorted = df_countries.sort_values('Work_Hours_Per_Year', ascending=True)
-    fig2 = px.bar(work_sorted, x='Work_Hours_Per_Year', y='Country', orientation='h',
-                  color='GDP_Per_Hour_Worked', color_continuous_scale=['#ef4444', '#ff9900', '#4ade80'],
-                  labels={'Work_Hours_Per_Year': 'Hours/Year', 'GDP_Per_Hour_Worked': '$/Hour'})
-    fig2.update_layout(coloraxis_colorbar=dict(title="$/hr"))
-    dark_layout(fig2, 500)
-    st.plotly_chart(fig2, use_container_width=True)
-
-    # Discovery
+    # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Germany works 840 fewer hours per year than Mexico — yet produces
-        nearly 4x more value per hour ($82 vs $22). Norway works even less and produces $95/hour.
-        The data shows a clear <em>negative</em> correlation: working smarter, not longer, is the path to prosperity.
-        Countries with strong labor protections, automation, and education invest in quality over quantity.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Germany works 840 fewer hours than Mexico per year — yet produces 4x more value per hour.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Norway works even less and produces $95/hour. The data shows a clear negative correlation: working smarter, not longer, is the path to prosperity. Countries with strong labor protections, automation, and education invest in quality over quantity.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: OECD Compendium of Productivity Indicators, ILO ILOSTAT, World Bank")
+
+    # Transition
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">The workday is underway. But when lunchtime arrives, what lands on the plate reveals something deeper about culture.</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -621,7 +625,7 @@ def render_food():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">12:00</div>
-        <div class="chapter-title">What the World Eats</div>
+        <div class="chapter-title">What do our meals reveal about our cultures?</div>
         <div class="chapter-desc">
             It's lunchtime somewhere. From rice to bread to corn — what does the world put on its plate?
             Calories, meat, and the surprising disconnect between spending and health.
@@ -669,52 +673,33 @@ def render_food():
 
     st.markdown("---")
 
-    chart1, chart2 = st.columns(2)
-
-    with chart1:
-        st.markdown("### 🥩 Meat Consumption (kg per person per year)")
-        meat_sorted = df_countries.sort_values('Meat_Kg_Per_Year', ascending=True)
-        fig = px.bar(meat_sorted, x='Meat_Kg_Per_Year', y='Country', orientation='h',
-                     color='Region', color_discrete_sequence=COLORS,
-                     labels={'Meat_Kg_Per_Year': 'Kg per person/year'})
-        fig.update_layout(yaxis_title="")
-        dark_layout(fig, 480)
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: FAO Food Balance Sheets, Our World in Data")
-
-    with chart2:
-        st.markdown("### 🔥 Daily Calorie Supply by Country")
-        cal_sorted = df_countries.sort_values('Calories_Per_Day', ascending=True)
-        fig2 = px.bar(cal_sorted, x='Calories_Per_Day', y='Country', orientation='h',
-                      color='Calories_Per_Day', color_continuous_scale=[RED, ORANGE, GREEN],
-                      labels={'Calories_Per_Day': 'Calories/day'})
-        fig2.update_layout(yaxis_title="", coloraxis_showscale=False)
-        dark_layout(fig2, 480)
-        st.plotly_chart(fig2, use_container_width=True)
-        st.caption("Source: FAO, WHO Global Health Observatory")
-
-    # Scatter: Calories vs Life Expectancy
+    # HERO: Calories vs Life Expectancy scatter - the most impactful story
     st.markdown("### 🍽️ Does Eating More Mean Living Longer?")
-    fig3 = px.scatter(df_countries, x='Calories_Per_Day', y='Life_Expectancy',
-                      text='Country', color='Region', size='Meat_Kg_Per_Year',
-                      color_discrete_sequence=COLORS,
-                      labels={'Calories_Per_Day': 'Daily Calorie Supply',
-                              'Life_Expectancy': 'Life Expectancy (years)',
-                              'Meat_Kg_Per_Year': 'Meat (kg/yr)'})
-    fig3.update_traces(textposition='top center', textfont_size=9)
-    dark_layout(fig3, 420)
-    st.plotly_chart(fig3, use_container_width=True)
+    fig = px.scatter(df_countries, x='Calories_Per_Day', y='Life_Expectancy',
+                     text='Country', color='Region', size='Meat_Kg_Per_Year',
+                     color_discrete_sequence=COLORS,
+                     labels={'Calories_Per_Day': 'Daily Calorie Supply',
+                             'Life_Expectancy': 'Life Expectancy (years)',
+                             'Meat_Kg_Per_Year': 'Meat (kg/yr)'})
+    fig.update_traces(textposition='top center', textfont_size=9)
+    dark_layout(fig, 480)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: FAO Food Balance Sheets, WHO Global Health Observatory")
 
-    # Discovery
+    # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> The USA consumes 3,782 calories and 124 kg of meat per person per year —
-        the highest in our dataset — yet has a life expectancy of just 77.5, lower than Japan (84.8) which
-        consumes only 2,726 calories and 52 kg of meat. More food ≠ better health. Japan's diet emphasizes
-        fish, vegetables, and portion control. The "quality over quantity" principle applies to plates too.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">The USA eats the most on Earth — yet lives 7 years less than Japan, which eats the least among wealthy nations.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">The USA consumes 3,782 calories and 124 kg of meat per person per year, yet has a life expectancy of just 77.5. Japan consumes only 2,726 calories and 52 kg of meat — and lives to 84.8. More food ≠ better health. Japan's diet emphasizes fish, vegetables, and portion control. The "quality over quantity" principle applies to plates too.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: FAO Food Balance Sheets 2023, WHO, Our World in Data")
+
+    # Transition
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">Meals finished, the afternoon hums with connection. But how connected are we — really?</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -724,7 +709,7 @@ def render_connection():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">15:00</div>
-        <div class="chapter-title">How Connected is Humanity?</div>
+        <div class="chapter-title">How connected is humanity — really?</div>
         <div class="chapter-desc">
             The afternoon hums with activity. Flights cross oceans, messages span continents,
             and the internet reaches places electricity barely does. The digital divide is shrinking — fast.
@@ -749,7 +734,6 @@ def render_connection():
         return
 
     user_guess = st.session_state.guess_made[guess_key]
-    # Japan has 195 per 100
     if user_guess == 'Japan':
         st.success("✅ Correct! Japan has **195 mobile subscriptions per 100 people** — nearly 2 phones per person!")
     else:
@@ -773,51 +757,23 @@ def render_connection():
 
     st.markdown("---")
 
-    chart1, chart2 = st.columns(2)
-
-    with chart1:
-        st.markdown("### 🌐 Internet Penetration (%)")
-        internet_sorted = df_countries.sort_values('Internet_Pct', ascending=True)
-        fig = px.bar(internet_sorted, x='Internet_Pct', y='Country', orientation='h',
-                     color='Internet_Pct', color_continuous_scale=[RED, ORANGE, GREEN],
-                     labels={'Internet_Pct': '% of Population Online'})
-        fig.update_layout(yaxis_title="", coloraxis_showscale=False)
-        dark_layout(fig, 480)
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: ITU, World Bank Digital Development")
-
-    with chart2:
-        st.markdown("### 📱 Mobile Subscriptions (per 100 people)")
-        mobile_sorted = df_countries.sort_values('Mobile_Per_100', ascending=True)
-        fig2 = px.bar(mobile_sorted, x='Mobile_Per_100', y='Country', orientation='h',
-                      color='Region', color_discrete_sequence=COLORS,
-                      labels={'Mobile_Per_100': 'Subscriptions per 100'})
-        fig2.update_layout(yaxis_title="")
-        # Add 100 mark reference line
-        fig2.add_vline(x=100, line_dash="dash", line_color=ORANGE, annotation_text="1 per person")
-        dark_layout(fig2, 480)
-        st.plotly_chart(fig2, use_container_width=True)
-        st.caption("Source: World Bank, ITU")
-
-    # Scatter: Internet vs Urbanization
-    st.markdown("### 🏙️ Urbanization vs Internet Access")
-    fig3 = px.scatter(df_countries, x='Urbanization_Pct', y='Internet_Pct',
-                      text='Country', color='Region', size='Mobile_Per_100',
-                      color_discrete_sequence=COLORS,
-                      labels={'Urbanization_Pct': 'Urban Population (%)',
-                              'Internet_Pct': 'Internet Users (%)',
-                              'Mobile_Per_100': 'Mobile/100'})
-    fig3.update_traces(textposition='top center', textfont_size=9)
-    dark_layout(fig3, 420)
-    st.plotly_chart(fig3, use_container_width=True)
+    # HERO: Mobile subscriptions chart with the 1-per-person reference line
+    st.markdown("### 📱 Mobile Subscriptions (per 100 people)")
+    mobile_sorted = df_countries.sort_values('Mobile_Per_100', ascending=True)
+    fig = px.bar(mobile_sorted, x='Mobile_Per_100', y='Country', orientation='h',
+                 color='Region', color_discrete_sequence=COLORS,
+                 labels={'Mobile_Per_100': 'Subscriptions per 100'})
+    fig.update_layout(yaxis_title="")
+    fig.add_vline(x=100, line_dash="dash", line_color=ORANGE, annotation_text="1 per person")
+    dark_layout(fig, 480)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: World Bank, ITU")
 
     # Flight routes map
     st.markdown("### ✈️ Global Airport Network")
     st.markdown("Major airports around the world — each dot represents a commercial airport.")
-    # Sample top airports by country for performance
     major_airports = df_airports.groupby('Country').head(5).copy()
     major_airports = major_airports[major_airports['IATA'].notna() & (major_airports['IATA'] != '\\N')]
-    # Limit to manageable size
     major_airports = major_airports.head(500)
 
     fig_map = px.scatter_geo(major_airports, lat='Lat', lon='Lon',
@@ -840,16 +796,20 @@ def render_connection():
     st.plotly_chart(fig_map, use_container_width=True)
     st.caption("Source: OpenFlights.org Airport Database")
 
-    # Discovery
+    # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Kenya has only 32.7% internet access but 114 mobile subscriptions per 100 people.
-        This is the "mobile leapfrog" — developing nations skipped landlines entirely and went straight to mobile.
-        M-Pesa (mobile money) launched in Kenya in 2007 and now processes more transactions than Western Union
-        does globally. Connectivity doesn't always look like a laptop and WiFi.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Kenya skipped the computer age entirely — and leapfrogged straight to mobile money.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Kenya has only 32.7% internet access but 114 mobile subscriptions per 100 people. M-Pesa (mobile money) launched there in 2007 and now processes more transactions than Western Union does globally. Connectivity doesn't always look like a laptop and WiFi — sometimes it looks like a $20 phone transforming an entire economy.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: ITU ICT Facts and Figures 2024, World Bank, OpenFlights.org")
+
+    # Transition
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">As evening falls, families gather. But does having more mean spending more time together?</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -859,7 +819,7 @@ def render_family():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">18:00</div>
-        <div class="chapter-title">Family & Leisure</div>
+        <div class="chapter-title">Does more money mean more time with family?</div>
         <div class="chapter-desc">
             The workday ends. Families gather. But who actually has the most free time?
             And does wealth buy you more hours with the people you love?
@@ -907,57 +867,33 @@ def render_family():
 
     st.markdown("---")
 
-    chart1, chart2 = st.columns(2)
+    # HERO: Leisure vs Happiness scatter
+    st.markdown("### 😊 Leisure Time vs Happiness")
+    fig = px.scatter(df_countries, x='Leisure_Min_Per_Day', y='Happiness_Score',
+                     text='Country', color='Region', size='GDP_Per_Capita',
+                     color_discrete_sequence=COLORS,
+                     labels={'Leisure_Min_Per_Day': 'Leisure (min/day)',
+                             'Happiness_Score': 'Happiness Score',
+                             'GDP_Per_Capita': 'GDP/Capita'})
+    fig.update_traces(textposition='top center', textfont_size=9)
+    dark_layout(fig, 480)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: World Happiness Report 2024, OECD")
 
-    with chart1:
-        st.markdown("### 🎯 Leisure Time by Country (min/day)")
-        leisure_sorted = df_countries.sort_values('Leisure_Min_Per_Day', ascending=True)
-        fig = px.bar(leisure_sorted, x='Leisure_Min_Per_Day', y='Country', orientation='h',
-                     color='Happiness_Score', color_continuous_scale=[RED, ORANGE, GREEN],
-                     labels={'Leisure_Min_Per_Day': 'Minutes/day', 'Happiness_Score': 'Happiness'})
-        fig.update_layout(yaxis_title="")
-        dark_layout(fig, 480)
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: OECD Better Life Index, Time Use Surveys")
-
-    with chart2:
-        st.markdown("### 😊 Leisure vs Happiness")
-        fig2 = px.scatter(df_countries, x='Leisure_Min_Per_Day', y='Happiness_Score',
-                          text='Country', color='Region', size='GDP_Per_Capita',
-                          color_discrete_sequence=COLORS,
-                          labels={'Leisure_Min_Per_Day': 'Leisure (min/day)',
-                                  'Happiness_Score': 'Happiness Score',
-                                  'GDP_Per_Capita': 'GDP/Capita'})
-        fig2.update_traces(textposition='top center', textfont_size=9)
-        dark_layout(fig2, 480)
-        st.plotly_chart(fig2, use_container_width=True)
-        st.caption("Source: World Happiness Report 2024, OECD")
-
-    # Work-life balance comparison
-    st.markdown("### ⚖️ Work-Life Balance: Work Hours vs Leisure Time")
-    fig3 = px.scatter(df_countries, x='Work_Hours_Per_Year', y='Leisure_Min_Per_Day',
-                      text='Country', color='Happiness_Score',
-                      color_continuous_scale=[RED, ORANGE, GREEN],
-                      size='Life_Expectancy',
-                      labels={'Work_Hours_Per_Year': 'Annual Work Hours',
-                              'Leisure_Min_Per_Day': 'Daily Leisure (min)',
-                              'Happiness_Score': 'Happiness',
-                              'Life_Expectancy': 'Life Exp.'})
-    fig3.update_traces(textposition='top center', textfont_size=9)
-    dark_layout(fig3, 420)
-    st.plotly_chart(fig3, use_container_width=True)
-
-    # Discovery
+    # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Finland has 285 minutes of leisure per day AND the world's highest
-        happiness score (7.8). Meanwhile, Kenya has just 165 minutes of leisure. But here's the twist:
-        the correlation between GDP and happiness plateaus around $40,000 per capita. Beyond that,
-        more money doesn't buy more happiness — but more free time does. The Nordic model (fewer work hours,
-        strong social safety nets, more leisure) consistently produces the happiest populations on Earth.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">After $40,000 GDP per capita, more money stops buying happiness — but more free time never does.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Finland has 285 minutes of leisure per day AND the world's highest happiness score (7.8). Kenya has just 165 minutes. The correlation between GDP and happiness plateaus around $40K/capita — beyond that, more money doesn't help. But more free time always does. The Nordic model (fewer work hours, strong safety nets, more leisure) consistently produces the happiest populations on Earth.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: OECD Better Life Index, World Happiness Report 2024, ILO")
+
+    # Transition
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">Night descends. The world grows quiet. But rest — like everything else — is not equally distributed.</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -967,7 +903,7 @@ def render_night():
     st.markdown("""
     <div class="chapter-hero">
         <div class="chapter-time-badge">22:00</div>
-        <div class="chapter-title">The World Rests</div>
+        <div class="chapter-title">Who sleeps the most — and does it even matter?</div>
         <div class="chapter-desc">
             Night falls. The world goes dark — but not everywhere equally.
             Some cities never sleep. Some villages have no light at all.
@@ -1016,54 +952,32 @@ def render_night():
 
     st.markdown("---")
 
-    chart1, chart2 = st.columns(2)
-
-    with chart1:
-        st.markdown("### 💡 Electricity Access (%)")
-        elec_sorted = df_countries.sort_values('Electricity_Pct', ascending=True)
-        fig = px.bar(elec_sorted, x='Electricity_Pct', y='Country', orientation='h',
-                     color='Electricity_Pct', color_continuous_scale=[RED, ORANGE, GREEN],
-                     labels={'Electricity_Pct': '% with Access'})
-        fig.update_layout(yaxis_title="", coloraxis_showscale=False)
-        dark_layout(fig, 480)
-        st.plotly_chart(fig, use_container_width=True)
-        st.caption("Source: World Bank, IEA World Energy Outlook")
-
-    with chart2:
-        st.markdown("### 🌙 Sleep Patterns vs Life Expectancy")
-        fig2 = px.scatter(df_countries, x='Sleep_Min_Per_Day', y='Life_Expectancy',
-                          text='Country', color='Region', size='GDP_Per_Capita',
-                          color_discrete_sequence=COLORS,
-                          labels={'Sleep_Min_Per_Day': 'Sleep (min/day)',
-                                  'Life_Expectancy': 'Life Expectancy (years)',
-                                  'GDP_Per_Capita': 'GDP/Capita'})
-        fig2.update_traces(textposition='top center', textfont_size=9)
-        dark_layout(fig2, 480)
-        st.plotly_chart(fig2, use_container_width=True)
-        st.caption("Source: OECD, WHO Life Tables")
-
-    # Electricity vs Life Expectancy
+    # HERO: Electricity vs Life Expectancy
     st.markdown("### 💡 Does Electricity Access Predict Life Expectancy?")
-    fig3 = px.scatter(df_countries, x='Electricity_Pct', y='Life_Expectancy',
-                      text='Country', color='Region', size='Population_M',
-                      color_discrete_sequence=COLORS,
-                      labels={'Electricity_Pct': 'Electricity Access (%)',
-                              'Life_Expectancy': 'Life Expectancy (years)'})
-    fig3.update_traces(textposition='top center', textfont_size=9)
-    dark_layout(fig3, 400)
-    st.plotly_chart(fig3, use_container_width=True)
+    fig = px.scatter(df_countries, x='Electricity_Pct', y='Life_Expectancy',
+                     text='Country', color='Region', size='Population_M',
+                     color_discrete_sequence=COLORS,
+                     labels={'Electricity_Pct': 'Electricity Access (%)',
+                             'Life_Expectancy': 'Life Expectancy (years)'})
+    fig.update_traces(textposition='top center', textfont_size=9)
+    dark_layout(fig, 480)
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption("Source: World Bank, IEA, WHO Global Health Observatory")
 
-    # Discovery
+    # Discovery box
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Nigeria has only 62% electricity access and a life expectancy of 53.9 years —
-        the lowest in our dataset. Meanwhile, every country with 100% electricity has life expectancy above 75.
-        Electricity isn't just about convenience — it powers hospitals, refrigerates vaccines, enables night-time
-        study, and runs water purification. Access to electricity is one of the strongest predictors of human
-        development outcomes.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Every country with 100% electricity has life expectancy above 75. No exceptions.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Nigeria has only 62% electricity access and a life expectancy of 53.9 years — the lowest in our dataset. Electricity isn't just about convenience — it powers hospitals, refrigerates vaccines, enables night-time study, and runs water purification. Access to electricity is one of the strongest predictors of human development outcomes.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: World Bank, IEA, WHO Global Health Observatory")
+
+    # Transition
+    st.markdown("""
+    <p style="text-align:center;color:#8892a4;font-style:italic;font-size:1.1rem;margin:32px 0;">The day ends. But not all days are the same...</p>
+    """, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -1216,11 +1130,9 @@ def render_children():
     # Discovery
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Discovery:</strong> Amara walks 45 minutes each day just to get water. 28% of children
-        in her region work instead of attending school. Yusuf's life expectancy at birth was 72 years —
-        but conflict has disrupted everything. Emma has never known a day without clean water, electricity,
-        or internet. <strong>The zip code a child is born into remains the strongest predictor of their future.</strong>
-        But the next chapter shows: things ARE getting better.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">The zip code a child is born into remains the strongest predictor of their future.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Amara walks 45 minutes each day just to get water. 28% of children in her region work instead of attending school. Yusuf's life expectancy at birth was 72 years — but conflict has disrupted everything. Emma has never known a day without clean water, electricity, or internet. But the next chapter shows: things ARE getting better.</p>
     </div>
     """, unsafe_allow_html=True)
     st.caption("Sources: UNICEF State of the World's Children 2024, WHO, World Bank, UNHCR")
@@ -1370,22 +1282,31 @@ def render_hope():
     display_df.columns = ['Indicator', '1990', '2024', 'Unit', 'Source']
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
-    # Closing message
+    # Emotional closing
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #0f2744 0%, #1a1a3e 100%);
+    <div style="text-align: center; padding: 48px; background: linear-gradient(135deg, #0f2744 0%, #1a1a3e 100%);
                 border-radius: 12px; border: 1px solid #1a2744; margin-top: 24px;">
-        <p style="font-size: 1.3rem; color: #4ade80; font-weight: 600; margin-bottom: 16px;">
-            "The world is getting better. Not fast enough. Not for everyone. But measurably, undeniably better."
+        <p style="font-size: 2rem; color: #ffffff; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">
+            One Earth. Billions of Lives. Twenty-Four Hours.
+        </p>
+        <p style="font-size: 1.2rem; color: #8892a4; margin-bottom: 8px;">
+            Although cultures differ, every person shares the same day.
+        </p>
+        <p style="font-size: 1.2rem; color: #4ade80; font-weight: 600; margin-bottom: 32px;">
+            How we spend it reveals what we value.
         </p>
         <p style="font-size: 0.95rem; color: #8892a4; max-width: 600px; margin: 0 auto 24px;">
             Child mortality has dropped 71% since 1990. Extreme poverty fell from 36% to 8.5%.
             Internet access went from nearly zero to 5.4 billion people connected.
             Every one of these numbers represents millions of lives transformed.
         </p>
-        <p style="font-size: 0.85rem; color: #6b7a94;">
+        <p style="font-size: 0.85rem; color: #6b7a94; max-width: 500px; margin: 0 auto 24px;">
             The progress isn't automatic — it's the result of vaccines, education, infrastructure,
             and the work of millions of people who decided things could be better.
+        </p>
+        <p style="font-size: 1.3rem; color: #ffffff; font-weight: 500; margin-top: 32px; margin-bottom: 16px;">
+            Thank you for taking this journey.
         </p>
         <p style="font-size: 2rem; margin-top: 24px;">🌍</p>
         <p style="font-size: 0.8rem; color: #555; margin-top: 16px;">
@@ -1397,46 +1318,13 @@ def render_hope():
     # Discovery
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Final Discovery:</strong> If current trends continue, extreme poverty could be eliminated
-        within our lifetimes. In 1990, more than 1 in 3 humans lived on less than $2.15/day. Today it's fewer
-        than 1 in 11. The number of children dying before age 5 has fallen from 12.6 million/year to 4.9 million.
-        Every single day, the world gets a little better — we just don't see it in the headlines.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Extreme poverty could be eliminated within our lifetimes.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">In 1990, more than 1 in 3 humans lived on less than $2.15/day. Today it's fewer than 1 in 11. The number of children dying before age 5 has fallen from 12.6 million/year to 4.9 million. Every single day, the world gets a little better — we just don't see it in the headlines.</p>
     </div>
     """, unsafe_allow_html=True)
 
 
-# ==========================================
-# MAIN JOURNEY ROUTER
-# ==========================================
-def show_journey():
-    show_navigation()
-
-    current = st.session_state.hour
-    if current == '06:00':
-        render_wake_up()
-    elif current == '09:00':
-        render_work()
-    elif current == '12:00':
-        render_food()
-    elif current == '15:00':
-        render_connection()
-    elif current == '18:00':
-        render_family()
-    elif current == '22:00':
-        render_night()
-    elif current == 'Children':
-        render_children()
-    elif current == 'Hope':
-        render_hope()
-    elif current == 'Thrive':
-        render_thrive()
-    elif current == 'What If':
-        render_what_if()
-
-
-# ==========================================
-# MAIN ENTRY POINT
-# ==========================================
 # ==========================================
 # THRIVE INDEX (Original Analysis)
 # ==========================================
@@ -1609,10 +1497,9 @@ def render_thrive():
 
     st.markdown("""
     <div class="discovery-box">
-        💡 <strong>Key Insight:</strong> Thrive Score and Happiness are correlated (r ≈ 0.82), but not perfectly.
-        Some countries with moderate Thrive Scores (like Colombia, Brazil) report happiness levels 
-        close to Nordic countries — suggesting that social connection, culture, and community 
-        contribute to well-being beyond material indicators.
+        <h3 style="color:#ff9900;margin:0;">💡 I HAD NO IDEA</h3>
+        <p style="font-size:1.3rem;color:#ffffff;margin:12px 0;font-weight:600;">Thriving and happiness are correlated — but not the same thing.</p>
+        <p style="font-size:0.9rem;color:#8892a4;">Thrive Score and Happiness correlate at r ≈ 0.82, but not perfectly. Some countries with moderate Thrive Scores (like Colombia, Brazil) report happiness levels close to Nordic countries — suggesting that social connection, culture, and community contribute to well-being beyond material indicators.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1699,7 +1586,6 @@ def render_what_if():
         with r2:
             st.metric("New Score", f"{new_thrive}", f"{change:+.1f}")
         with r3:
-            color = "#4ade80" if change >= 0 else "#ef4444"
             st.metric("Change", f"{change_pct:+.1f}%")
 
         # Before/After radar
@@ -1736,15 +1622,15 @@ def render_what_if():
         if change > 0:
             st.markdown(f"""
             <div class="discovery-box">
-                🚀 <strong>Projected outcome:</strong> If {country} achieves these improvements, 
-                its Thrive Score would rise from <strong>{row['Thrive_Score']}</strong> to <strong>{new_thrive}</strong> 
+                🚀 <strong>Projected outcome:</strong> If {country} achieves these improvements,
+                its Thrive Score would rise from <strong>{row['Thrive_Score']}</strong> to <strong>{new_thrive}</strong>
                 (+{change_pct:.1f}%). {'This would move it ahead of ' + df[df['Thrive_Score'] < new_thrive].iloc[-1]['Country'] + ' in the global rankings.' if len(df[df['Thrive_Score'] < new_thrive]) > 0 else ''}
             </div>
             """, unsafe_allow_html=True)
         elif change < 0:
             st.markdown(f"""
             <div class="discovery-box" style="border-left-color: #ef4444;">
-                ⚠️ <strong>Warning:</strong> These changes would reduce {country}'s Thrive Score 
+                ⚠️ <strong>Warning:</strong> These changes would reduce {country}'s Thrive Score
                 from <strong>{row['Thrive_Score']}</strong> to <strong>{new_thrive}</strong> ({change_pct:.1f}%).
             </div>
             """, unsafe_allow_html=True)
@@ -1758,6 +1644,38 @@ def render_what_if():
     st.caption("Note: This is a simplified projection model for illustrative purposes. Real-world outcomes depend on many interacting factors.")
 
 
+# ==========================================
+# MAIN JOURNEY ROUTER
+# ==========================================
+def show_journey():
+    show_navigation()
+
+    current = st.session_state.hour
+    if current == '06:00':
+        render_wake_up()
+    elif current == '09:00':
+        render_work()
+    elif current == '12:00':
+        render_food()
+    elif current == '15:00':
+        render_connection()
+    elif current == '18:00':
+        render_family()
+    elif current == '22:00':
+        render_night()
+    elif current == 'Children':
+        render_children()
+    elif current == 'Hope':
+        render_hope()
+    elif current == 'Thrive':
+        render_thrive()
+    elif current == 'What If':
+        render_what_if()
+
+
+# ==========================================
+# MAIN ENTRY POINT
+# ==========================================
 def main():
     if st.session_state.page == 'landing':
         show_landing()
